@@ -18,7 +18,8 @@ cp conf/zoo_sample.cfg conf/zoo.cfg
 
 ### Start druid services
 
-```nohup java `cat conf/druid/coordinator/jvm.config | xargs` -cp "conf/druid/_common:conf/druid/coordinator:lib/*" io.druid.cli.Main server coordinator >> /data/druid/logs/coordinator.log &
+```
+nohup java `cat conf/druid/coordinator/jvm.config | xargs` -cp "conf/druid/_common:conf/druid/coordinator:lib/*" io.druid.cli.Main server coordinator >> /data/druid/logs/coordinator.log &
 
 nohup java `cat conf/druid/overlord/jvm.config | xargs` -cp "conf/druid/_common:conf/druid/overlord:lib/*" io.druid.cli.Main server overlord >> /data/druid/logs/overlord.log &
 
@@ -26,7 +27,8 @@ nohup java `cat conf/druid/historical/jvm.config | xargs` -cp "conf/druid/_commo
 
 nohup java `cat conf/druid/middleManager/jvm.config | xargs` -cp "conf/druid/_common:conf/druid/middleManager:lib/*" io.druid.cli.Main server middleManager >> /data/druid/logs/middleManager.log &
 
-nohup java `cat conf/druid/broker/jvm.config | xargs` -cp "conf/druid/_common:conf/druid/broker:lib/*" io.druid.cli.Main server broker >> /data/druid/logs/broker.log &```
+nohup java `cat conf/druid/broker/jvm.config | xargs` -cp "conf/druid/_common:conf/druid/broker:lib/*" io.druid.cli.Main server broker >> /data/druid/logs/broker.log &
+```
 
 ### Indexing APIs
 
