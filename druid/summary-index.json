@@ -1,0 +1,156 @@
+{
+  "type": "index_hadoop",
+  "spec": {
+    "dataSchema": {
+      "dataSource": "summary",
+      "parser": {
+        "type": "string",
+        "parseSpec": {
+          "format": "json",
+          "flattenSpec": {
+            "useFieldDiscovery": true,
+            "fields": [
+              {
+                "type": "root",
+                "name": "eid"
+              },
+              {
+                "type":"root",
+                "name":"ver"
+              },
+              {
+                "type":"root",
+                "name":"mid"
+              },
+              {
+                "type": "root",
+                "name": "syncts"
+              },
+              {
+                "type": "root",
+                "name": "uid"
+              },
+              {
+                "type": "path",
+                "name": "channel",
+                "expr": "$.dimensions.channel"
+              },
+              {
+                "type": "path",
+                "name": "deviceId",
+                "expr": "$.dimensions.did"
+              },
+              {
+                "type": "path",
+                "name": "producerId",
+                "expr": "$.dimensions.pdata.id"
+              },
+              {
+                "type": "path",
+                "name": "producerVer",
+                "expr": "$.dimensions.pdata.ver"
+              },
+              {
+                "type": "path",
+                "name": "producerPid",
+                "expr": "$.dimensions.pdata.pid"
+              },
+              {
+                "type": "path",
+                "name": "sid",
+                "expr": "$.dimensions.sid"
+              },
+              {
+                "type": "path",
+                "name": "type",
+                "expr": "$.dimensions.type"
+              },
+              {
+                "type": "path",
+                "name": "mode",
+                "expr": "$.dimensions.mode"
+              },
+              {
+                "type": "path",
+                "name": "objectId",
+                "expr": "$.object.id"
+              },
+              {
+                "type": "path",
+                "name": "objectType",
+                "expr": "$.object.type"
+              },
+              {
+                "type": "path",
+                "name": "objectVer",
+                "expr": "$.object.ver"
+              },
+              {
+                "type": "path",
+                "name": "timeSpent",
+                "expr": "$.edata.eks.time_spent"
+              },
+              {
+                "type": "path",
+                "name": "timeDiff",
+                "expr": "$.edata.eks.time_diff"
+              },
+              {
+                "type": "path",
+                "name": "interactions",
+                "expr": "$.edata.eks.interact_events_count"
+              }
+            ]
+          },
+          "dimensionsSpec": {
+            "dimensions": [],
+            "dimensionsExclusions": []
+          },
+          "timestampSpec": {
+            "column": "syncts",
+            "format": "auto"
+          }
+        }
+      },
+      "metricsSpec": [
+        {
+          "type": "longSum",
+          "name": "totalInteractions",
+          "fieldName": "interactions"
+        },
+        {
+          "type": "doubleSum",
+          "name": "totalTimespent",
+          "fieldName": "timeSpent"
+        }
+      ],
+      "granularitySpec": {
+        "type": "uniform",
+        "segmentGranularity": "week",
+        "queryGranularity": "none",
+        "rollup": true
+      }
+    },
+    "ioConfig": {
+      "type": "hadoop",
+      "inputSpec": {
+        "type": "static",
+        "paths": "wasbs://telemetry-data-store@ntpproductionall.blob.core.windows.net/derived/wfs/2018-11-01*.json.gz"
+      },
+      "appendToExisting": true
+    },
+    "tuningConfig" : {
+      "type" : "hadoop",
+      "partitionsSpec" : {
+        "type" : "hashed",
+        "targetPartitionSize" : 5000000
+      },
+      "jobProperties" : {
+        "fs.azure.impl" : "org.apache.hadoop.fs.azure.NativeAzureFileSystem",
+        "fs.azure.account.key.ntpproductionall.blob.core.windows.net": "<Azure-Production-Blob-Storage-Key>"
+      },
+      "forceExtendableShardSpecs" : true
+    }
+  },
+  "hadoopDependencyCoordinates": ["org.apache.hadoop:hadoop-client:2.7.3"]
+}
