@@ -1,5 +1,5 @@
 ---
-- hosts: spark
+- hosts: spark-temp
   vars_files:
     - "{{inventory_dir}}/secrets/dp_secrets.yml"
   roles:
