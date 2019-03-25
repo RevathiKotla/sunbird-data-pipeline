@@ -75,7 +75,6 @@ public class JobMetrics {
 
     public void setConsumerLag(String offset,Map<String, ConcurrentHashMap<String, Metric>> container_registry) {
 
-        System.out.println("the size of system stream partition"+context.getSystemStreamPartitions().size());
         for (SystemStreamPartition s : context.getSystemStreamPartitions()) {
             long high_mark = Long.valueOf(container_registry.get("org.apache.samza.system.kafka.KafkaSystemConsumerMetrics").
                     get(s.getSystem() + "-" + s.getStream() + "-" + s.getPartition().getPartitionId() + "-offset-change").toString());
