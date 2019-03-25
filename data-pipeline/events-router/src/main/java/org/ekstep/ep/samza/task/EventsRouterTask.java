@@ -20,18 +20,18 @@
 package org.ekstep.ep.samza.task;
 
 import org.apache.samza.config.Config;
+import org.apache.samza.metrics.Metric;
+import org.apache.samza.metrics.MetricsRegistryMap;
 import org.apache.samza.system.IncomingMessageEnvelope;
 import org.apache.samza.system.OutgoingMessageEnvelope;
 import org.apache.samza.system.SystemStream;
-import org.apache.samza.task.InitableTask;
-import org.apache.samza.task.MessageCollector;
-import org.apache.samza.task.StreamTask;
-import org.apache.samza.task.TaskContext;
-import org.apache.samza.task.TaskCoordinator;
-import org.apache.samza.task.WindowableTask;
+import org.apache.samza.task.*;
 import org.ekstep.ep.samza.core.JobMetrics;
 import org.ekstep.ep.samza.core.Logger;
 import org.ekstep.ep.samza.service.EventsRouterService;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class EventsRouterTask implements StreamTask, InitableTask, WindowableTask {
 
@@ -39,22 +39,33 @@ public class EventsRouterTask implements StreamTask, InitableTask, WindowableTas
 	private EventsRouterConfig config;
 	private JobMetrics metrics;
 	private EventsRouterService service;
+    private TaskContext context;
+    private Map<String, ConcurrentHashMap<String, Metric>> container_registry;
+	public EventsRouterTask(Config config, TaskContext context,Map<String, ConcurrentHashMap<String, Metric>> container_registry) {
 
-	public EventsRouterTask(Config config, TaskContext context) {
-		init(config, context);
+		init(config, context,container_registry);
 	}
 
 	public EventsRouterTask() {
 
 	}
 
+
 	@Override
 	public void init(Config config, TaskContext context) {
-		
+		init(config,context,null);
+	}
+
+	private void init(Config config, TaskContext context, Map<String, ConcurrentHashMap<String, Metric>> container_registry)
+	{
 		this.config = new EventsRouterConfig(config);
 		metrics = new JobMetrics(context, this.config.jobName());
 		service = new EventsRouterService(this.config);
+		this.context=context;
+		this.container_registry=container_registry;
+
 	}
+
 
 	@Override
 	public void process(IncomingMessageEnvelope envelope, MessageCollector collector, TaskCoordinator taskCoordinator)
@@ -63,6 +74,13 @@ public class EventsRouterTask implements StreamTask, InitableTask, WindowableTas
 		EventsRouterSink sink = new EventsRouterSink(collector, metrics, config);
 		EventsRouterSource source = new EventsRouterSource(envelope);
 		service.process(source, sink);
+		if( null == container_registry) {
+			metrics.setConsumerLag(envelope.getOffset(), ((MetricsRegistryMap) context.getSamzaContainerContext().metricsRegistry).metrics());
+		}
+		else
+		{
+			metrics.setConsumerLag(envelope.getOffset(),container_registry);
+		}
 	}
 
 	@Override

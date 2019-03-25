@@ -1,27 +1,31 @@
 package org.ekstep.ep.samza.task;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
-import static org.mockito.Mockito.verify;
-
 import org.apache.samza.config.Config;
+import org.apache.samza.container.SamzaContainerContext;
 import org.apache.samza.metrics.Counter;
+import org.apache.samza.metrics.Metric;
 import org.apache.samza.metrics.MetricsRegistry;
+import org.apache.samza.metrics.MetricsRegistryMap;
 import org.apache.samza.system.IncomingMessageEnvelope;
 import org.apache.samza.system.OutgoingMessageEnvelope;
 import org.apache.samza.system.SystemStream;
 import org.apache.samza.task.MessageCollector;
 import org.apache.samza.task.TaskContext;
 import org.apache.samza.task.TaskCoordinator;
+import org.ekstep.ep.samza.core.JobMetrics;
 import org.ekstep.ep.samza.fixtures.EventFixture;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.*;
 
 public class EventsRouterTaskTest {
 
@@ -38,6 +42,7 @@ public class EventsRouterTaskTest {
 	private IncomingMessageEnvelope envelopeMock;
 	private Config configMock;
 	private EventsRouterTask eventsRouterTask;
+	Map<String, ConcurrentHashMap<String, Metric>> container_registry;
 
 	@Before
 	public void setUp() {
@@ -48,23 +53,22 @@ public class EventsRouterTaskTest {
 		coordinatorMock = mock(TaskCoordinator.class);
 		envelopeMock = mock(IncomingMessageEnvelope.class);
 		configMock = Mockito.mock(Config.class);
-
+		container_registry=mock(Map.class);
 		stub(configMock.get("router.events.telemetry.route.topic", TELEMETRY_EVENTS_TOPIC)).toReturn(TELEMETRY_EVENTS_TOPIC);
 		stub(configMock.get("output.failed.topic.name", FAILED_TOPIC)).toReturn(FAILED_TOPIC);
 		stub(configMock.get("router.events.summary.route.topic", SUMMARY_EVENTS_TOPIC)).toReturn(SUMMARY_EVENTS_TOPIC);
 		stub(configMock.get("output.malformed.topic.name", MALFORMED_TOPIC)).toReturn(MALFORMED_TOPIC);
-
 		stub(metricsRegistry.newCounter(anyString(), anyString())).toReturn(counter);
 		stub(contextMock.getMetricsRegistry()).toReturn(metricsRegistry);
 
 	}
 
+
 	@Test
 	public void shouldRouteSummaryEventsToSummaryTopic() throws Exception {
 
 		stub(configMock.get("router.events.summary.route.events", "ME_WORKFLOW_SUMMARY")).toReturn("ME_WORKFLOW_SUMMARY");
-		eventsRouterTask = new EventsRouterTask(configMock, contextMock);
-		
+		eventsRouterTask = new EventsRouterTask(configMock, contextMock,container_registry);
 		stub(envelopeMock.getMessage()).toReturn(EventFixture.WORKFLOW_SUMMARY_EVENT);
 		eventsRouterTask.process(envelopeMock, collectorMock, coordinatorMock);
 		verify(collectorMock).send(argThat(validateOutputTopic(envelopeMock.getMessage(), SUMMARY_EVENTS_TOPIC)));
@@ -74,8 +78,7 @@ public class EventsRouterTaskTest {
 	public void shouldRouteTelemetryEventsToTelemetryTopic() throws Exception {
 
 		stub(configMock.get("router.events.summary.route.events", "ME_WORKFLOW_SUMMARY")).toReturn("ME_WORKFLOW_SUMMARY");
-		eventsRouterTask = new EventsRouterTask(configMock, contextMock);
-		
+		eventsRouterTask = new EventsRouterTask(configMock, contextMock,container_registry);
 		stub(envelopeMock.getMessage()).toReturn(EventFixture.START_EVENT);
 		eventsRouterTask.process(envelopeMock, collectorMock, coordinatorMock);
 		verify(collectorMock).send(argThat(validateOutputTopic(envelopeMock.getMessage(), TELEMETRY_EVENTS_TOPIC)));
@@ -86,7 +89,7 @@ public class EventsRouterTaskTest {
 	public void shouldSendEventToFailedTopicIfEventIsNotParseable() throws Exception {
 
 		stub(envelopeMock.getMessage()).toReturn(EventFixture.UNPARSABLE_START_EVENT);
-		eventsRouterTask = new EventsRouterTask(configMock, contextMock);
+		eventsRouterTask = new EventsRouterTask(configMock, contextMock,container_registry);
 		eventsRouterTask.process(envelopeMock, collectorMock, coordinatorMock);
 		verify(collectorMock).send(argThat(validateOutputTopic(envelopeMock.getMessage(), MALFORMED_TOPIC)));
 	}
@@ -95,10 +98,11 @@ public class EventsRouterTaskTest {
 	public void shouldSendEventToMalformedTopicIfEventIsAnyRandomString() throws Exception {
 
 		stub(envelopeMock.getMessage()).toReturn(EventFixture.ANY_STRING);
-		eventsRouterTask = new EventsRouterTask(configMock, contextMock);
+		eventsRouterTask = new EventsRouterTask(configMock, contextMock,container_registry);
 		eventsRouterTask.process(envelopeMock, collectorMock, coordinatorMock);
 		verify(collectorMock).send(argThat(validateOutputTopic(envelopeMock.getMessage(), MALFORMED_TOPIC)));
 	}
+
 
 	public ArgumentMatcher<OutgoingMessageEnvelope> validateOutputTopic(final Object message, final String stream) {
 		return new ArgumentMatcher<OutgoingMessageEnvelope>() {
