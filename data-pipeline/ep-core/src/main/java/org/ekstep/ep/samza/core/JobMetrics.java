@@ -24,7 +24,9 @@ public class JobMetrics {
     private final Counter cacheMissCount;
     private final Counter cacheExpiredCount;
     private TaskContext context;
-    private  static HashMap<Integer,Long> lag_map=new HashMap<Integer, Long>();
+    private int partition;
+    private long consumer_lag;
+    private long offset;
 
 
     public JobMetrics(TaskContext context) {
@@ -73,14 +75,25 @@ public class JobMetrics {
 
     public void incCacheMissCounter() { cacheMissCount.inc();}
 
-    public void setConsumerLag(String offset,Map<String, ConcurrentHashMap<String, Metric>> container_registry) {
+    public void setOffset(Long offset)
+    {
+        this.offset= offset;
+    }
+
+    public long getConsumerLag(Map<String, ConcurrentHashMap<String, Metric>> container_registry) {
 
         for (SystemStreamPartition s : context.getSystemStreamPartitions()) {
-            long high_mark = Long.valueOf(container_registry.get("org.apache.samza.system.kafka.KafkaSystemConsumerMetrics").
+            long log_end_offset = Long.valueOf(container_registry.get("org.apache.samza.system.kafka.KafkaSystemConsumerMetrics").
                     get(s.getSystem() + "-" + s.getStream() + "-" + s.getPartition().getPartitionId() + "-offset-change").toString());
-            lag_map.put(s.getPartition().getPartitionId(), high_mark - Long.valueOf(offset));
+            consumer_lag=log_end_offset-Long.valueOf(offset+1);
+            partition=s.getPartition().getPartitionId();
+
+
         }
+        return consumer_lag;
     }
+
+
 
     public String collect() {
         Map<String,Object> metricsEvent = new HashMap<>();
@@ -89,12 +102,8 @@ public class JobMetrics {
         metricsEvent.put("failed-message-count", failedMessageCount.getCount());
         metricsEvent.put("error-message-count", errorMessageCount.getCount());
         metricsEvent.put("skipped-message-count", skippedMessageCount.getCount());
-        long consumer_lag=0;
-        for(Integer partition: lag_map.keySet())
-        {
-            consumer_lag=consumer_lag+lag_map.get(partition);
-        }
-        metricsEvent.put("consumer_lag", consumer_lag);
+        metricsEvent.put("consumer_lag", getConsumerLag(((MetricsRegistryMap) context.getSamzaContainerContext().metricsRegistry).metrics()));
+        metricsEvent.put("partition",partition);
         return new Gson().toJson(metricsEvent);
     }
 }

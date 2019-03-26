@@ -1,15 +1,13 @@
 package org.ekstep.ep.samza.task;
 
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.samza.config.Config;
+
 
 public class EventsRouterConfig {
 
     private final String JOB_NAME = "EventsRouter";
-    
+
     private String failedTopic;
     private String metricsTopic;
     private String telemetryEventsRouteTopic;
@@ -66,4 +64,6 @@ public class EventsRouterConfig {
     public String jobName() {
         return JOB_NAME;
     }
+
+
 }

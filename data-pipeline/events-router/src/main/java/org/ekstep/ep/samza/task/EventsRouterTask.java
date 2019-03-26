@@ -40,30 +40,22 @@ public class EventsRouterTask implements StreamTask, InitableTask, WindowableTas
 	private JobMetrics metrics;
 	private EventsRouterService service;
     private TaskContext context;
-    private Map<String, ConcurrentHashMap<String, Metric>> container_registry;
-	public EventsRouterTask(Config config, TaskContext context,Map<String, ConcurrentHashMap<String, Metric>> container_registry) {
+	public EventsRouterTask(Config config, TaskContext context) {
 
-		init(config, context,container_registry);
+		init(config, context);
 	}
 
 	public EventsRouterTask() {
 
 	}
 
-
 	@Override
 	public void init(Config config, TaskContext context) {
-		init(config,context,null);
-	}
 
-	private void init(Config config, TaskContext context, Map<String, ConcurrentHashMap<String, Metric>> container_registry)
-	{
 		this.config = new EventsRouterConfig(config);
 		metrics = new JobMetrics(context, this.config.jobName());
 		service = new EventsRouterService(this.config);
 		this.context=context;
-		this.container_registry=container_registry;
-
 	}
 
 
@@ -74,13 +66,6 @@ public class EventsRouterTask implements StreamTask, InitableTask, WindowableTas
 		EventsRouterSink sink = new EventsRouterSink(collector, metrics, config);
 		EventsRouterSource source = new EventsRouterSource(envelope);
 		service.process(source, sink);
-		if( null == container_registry) {
-			metrics.setConsumerLag(envelope.getOffset(), ((MetricsRegistryMap) context.getSamzaContainerContext().metricsRegistry).metrics());
-		}
-		else
-		{
-			metrics.setConsumerLag(envelope.getOffset(),container_registry);
-		}
 	}
 
 	@Override

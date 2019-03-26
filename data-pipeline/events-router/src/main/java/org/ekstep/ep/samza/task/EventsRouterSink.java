@@ -6,12 +6,14 @@ import org.ekstep.ep.samza.core.JobMetrics;
 import org.ekstep.ep.samza.domain.Event;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 
 public class EventsRouterSink extends BaseSink {
 
 	private JobMetrics metrics;
 	private EventsRouterConfig config;
-	
+
+
 	public EventsRouterSink(MessageCollector collector, JobMetrics metrics, EventsRouterConfig config) {
 		super(collector);
 		this.metrics = metrics;
@@ -41,5 +43,10 @@ public class EventsRouterSink extends BaseSink {
 
 	public void incrementSkippedCount(Event event) {
 		metrics.incSkippedCounter();
+	}
+
+	public void setMetricsOffset(String offset)
+	{
+		metrics.setOffset(Long.valueOf(offset));
 	}
 }

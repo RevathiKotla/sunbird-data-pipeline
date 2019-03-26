@@ -15,6 +15,7 @@ public class EventsRouterSource {
 
     public EventsRouterSource(IncomingMessageEnvelope envelope) {
         this.envelope = envelope;
+
     }
 
     public Event getEvent(){
@@ -30,4 +31,5 @@ public class EventsRouterSource {
     public String getMessage() {
         return envelope.toString();
     }
+    public String getOffset() { return envelope.getOffset(); }
 }
