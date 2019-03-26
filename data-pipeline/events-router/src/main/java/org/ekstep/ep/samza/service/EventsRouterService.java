@@ -1,14 +1,13 @@
 package org.ekstep.ep.samza.service;
 
-import static java.text.MessageFormat.format;
-
+import com.google.gson.JsonSyntaxException;
 import org.ekstep.ep.samza.core.Logger;
 import org.ekstep.ep.samza.domain.Event;
 import org.ekstep.ep.samza.task.EventsRouterConfig;
 import org.ekstep.ep.samza.task.EventsRouterSink;
 import org.ekstep.ep.samza.task.EventsRouterSource;
 
-import com.google.gson.JsonSyntaxException;
+import static java.text.MessageFormat.format;
 
 public class EventsRouterService {
 	
@@ -32,6 +31,8 @@ public class EventsRouterService {
 			} else {
 				sink.toTelemetryEventsTopic(event);
 			}
+
+
 		} catch (JsonSyntaxException e) {
 			LOGGER.error(null, "INVALID EVENT: " + source.getMessage());
 			sink.toMalformedTopic(source.getMessage());
@@ -42,5 +43,7 @@ public class EventsRouterService {
 					e);
 			sink.toErrorTopic(event, e.getMessage());
 		}
+		sink.setMetricsOffset(source.getOffset());
 	}
 }
+
