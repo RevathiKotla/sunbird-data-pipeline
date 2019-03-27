@@ -1,19 +1,13 @@
 package org.ekstep.ep.samza.task;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
-import static org.mockito.Mockito.verify;
-
+import org.apache.samza.Partition;
 import org.apache.samza.config.Config;
 import org.apache.samza.metrics.Counter;
 import org.apache.samza.metrics.MetricsRegistry;
 import org.apache.samza.system.IncomingMessageEnvelope;
 import org.apache.samza.system.OutgoingMessageEnvelope;
 import org.apache.samza.system.SystemStream;
+import org.apache.samza.system.SystemStreamPartition;
 import org.apache.samza.task.MessageCollector;
 import org.apache.samza.task.TaskContext;
 import org.apache.samza.task.TaskCoordinator;
@@ -22,6 +16,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.*;
 
 public class EventsRouterTaskTest {
 
@@ -48,7 +47,6 @@ public class EventsRouterTaskTest {
 		coordinatorMock = mock(TaskCoordinator.class);
 		envelopeMock = mock(IncomingMessageEnvelope.class);
 		configMock = Mockito.mock(Config.class);
-
 		stub(configMock.get("router.events.telemetry.route.topic", TELEMETRY_EVENTS_TOPIC)).toReturn(TELEMETRY_EVENTS_TOPIC);
 		stub(configMock.get("output.failed.topic.name", FAILED_TOPIC)).toReturn(FAILED_TOPIC);
 		stub(configMock.get("router.events.summary.route.topic", SUMMARY_EVENTS_TOPIC)).toReturn(SUMMARY_EVENTS_TOPIC);
@@ -56,7 +54,8 @@ public class EventsRouterTaskTest {
 
 		stub(metricsRegistry.newCounter(anyString(), anyString())).toReturn(counter);
 		stub(contextMock.getMetricsRegistry()).toReturn(metricsRegistry);
-		stub(envelopeMock.getOffset()).toReturn("0");
+		stub(envelopeMock.getOffset()).toReturn("2");
+		stub(envelopeMock.getSystemStreamPartition()).toReturn( new SystemStreamPartition("kafka","telemetry.denorm",new Partition(1)));
 
 	}
 

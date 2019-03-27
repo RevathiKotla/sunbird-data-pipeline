@@ -1,5 +1,6 @@
 package org.ekstep.ep.samza.task;
 
+import org.apache.samza.system.SystemStreamPartition;
 import org.apache.samza.task.MessageCollector;
 import org.ekstep.ep.samza.core.BaseSink;
 import org.ekstep.ep.samza.core.JobMetrics;
@@ -45,8 +46,8 @@ public class EventsRouterSink extends BaseSink {
 		metrics.incSkippedCounter();
 	}
 
-	public void setMetricsOffset(String offset)
+	public void setMetricsOffset(SystemStreamPartition systemStreamPartition,String offset)
 	{
-		metrics.setOffset(Long.valueOf(offset));
+		metrics.setOffset(systemStreamPartition,offset);
 	}
 }

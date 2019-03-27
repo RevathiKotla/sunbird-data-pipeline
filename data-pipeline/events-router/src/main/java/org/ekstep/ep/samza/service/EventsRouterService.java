@@ -10,7 +10,7 @@ import org.ekstep.ep.samza.task.EventsRouterSource;
 import static java.text.MessageFormat.format;
 
 public class EventsRouterService {
-	
+
 	static Logger LOGGER = new Logger(EventsRouterService.class);
 	private final EventsRouterConfig config;
 
@@ -24,6 +24,7 @@ public class EventsRouterService {
 			event = source.getEvent();
 			String eid = event.eid();
 			String summaryRouteEventPrefix = this.config.getSummaryRouteEvents();
+            //Thread.sleep(60000);
 			if (eid.startsWith(summaryRouteEventPrefix)) {
 				sink.toSummaryEventsTopic(event);
 			} else if (eid.startsWith("ME_")) {
@@ -43,7 +44,6 @@ public class EventsRouterService {
 					e);
 			sink.toErrorTopic(event, e.getMessage());
 		}
-		sink.setMetricsOffset(source.getOffset());
+		sink.setMetricsOffset(source.getSystemStreamPartition(),source.getOffset());
 	}
 }
-

@@ -26,9 +26,7 @@ public class JobMetrics {
     private TaskContext context;
     private int partition;
     private long consumer_lag;
-    private long offset;
-
-
+    private HashMap<String,Long> offset_map= new HashMap<>();
     public JobMetrics(TaskContext context) {
         this(context,null);
     }
@@ -75,27 +73,33 @@ public class JobMetrics {
 
     public void incCacheMissCounter() { cacheMissCount.inc();}
 
-    public void setOffset(Long offset)
+    public void setOffset(SystemStreamPartition systemStreamPartition,String offset)
     {
-        this.offset= offset;
+       offset_map.put(systemStreamPartition.getStream()+systemStreamPartition.getPartition().getPartitionId(), Long.valueOf(offset));
     }
 
     public long getConsumerLag(Map<String, ConcurrentHashMap<String, Metric>> container_registry) {
-
-        for (SystemStreamPartition s : context.getSystemStreamPartitions()) {
-            long log_end_offset = Long.valueOf(container_registry.get("org.apache.samza.system.kafka.KafkaSystemConsumerMetrics").
-                    get(s.getSystem() + "-" + s.getStream() + "-" + s.getPartition().getPartitionId() + "-offset-change").toString());
-            consumer_lag=log_end_offset-Long.valueOf(offset+1);
-            partition=s.getPartition().getPartitionId();
-
-
+        try {
+            consumer_lag = 0;
+            for (SystemStreamPartition s : context.getSystemStreamPartitions()) {
+                long log_end_offset = Long.valueOf(container_registry.get("org.apache.samza.system.kafka.KafkaSystemConsumerMetrics").
+                        get(s.getSystem() + "-" + s.getStream() + "-" + s.getPartition().getPartitionId() + "-offset-change").toString());
+                long offset= offset_map.containsKey(s.getStream() + s.getPartition().getPartitionId()) ? offset_map.get(s.getStream() + s.getPartition().getPartitionId()) + 1 : 0;
+                consumer_lag = consumer_lag + (log_end_offset - offset);
+                partition = s.getPartition().getPartitionId();
+            }
+            return consumer_lag;
+        }catch (Exception e)
+        {
+            LOGGER.error(null,
+                    "EXCEPTION. WHEN COMPUTING CONSUMER LAG METRIC",
+                    e);
+            return 0;
         }
-        return consumer_lag;
     }
 
-
-
     public String collect() {
+
         Map<String,Object> metricsEvent = new HashMap<>();
         metricsEvent.put("job-name", jobName);
         metricsEvent.put("success-message-count", successMessageCount.getCount());

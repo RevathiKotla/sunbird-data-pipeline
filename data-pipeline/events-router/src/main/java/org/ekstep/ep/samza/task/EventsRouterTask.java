@@ -20,8 +20,6 @@
 package org.ekstep.ep.samza.task;
 
 import org.apache.samza.config.Config;
-import org.apache.samza.metrics.Metric;
-import org.apache.samza.metrics.MetricsRegistryMap;
 import org.apache.samza.system.IncomingMessageEnvelope;
 import org.apache.samza.system.OutgoingMessageEnvelope;
 import org.apache.samza.system.SystemStream;
@@ -30,16 +28,12 @@ import org.ekstep.ep.samza.core.JobMetrics;
 import org.ekstep.ep.samza.core.Logger;
 import org.ekstep.ep.samza.service.EventsRouterService;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 public class EventsRouterTask implements StreamTask, InitableTask, WindowableTask {
 
 	static Logger LOGGER = new Logger(EventsRouterTask.class);
 	private EventsRouterConfig config;
 	private JobMetrics metrics;
 	private EventsRouterService service;
-    private TaskContext context;
 	public EventsRouterTask(Config config, TaskContext context) {
 
 		init(config, context);
@@ -51,11 +45,9 @@ public class EventsRouterTask implements StreamTask, InitableTask, WindowableTas
 
 	@Override
 	public void init(Config config, TaskContext context) {
-
 		this.config = new EventsRouterConfig(config);
 		metrics = new JobMetrics(context, this.config.jobName());
 		service = new EventsRouterService(this.config);
-		this.context=context;
 	}
 
 
