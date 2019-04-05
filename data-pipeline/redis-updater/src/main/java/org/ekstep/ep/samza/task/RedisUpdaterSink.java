@@ -24,9 +24,8 @@ public class RedisUpdaterSink {
         metrics.incErrorCounter();
     }
 
-    public void setMetricsOffset(SystemStreamPartition systemStreamPartition, String offset)
-    {
-        metrics.setOffset(systemStreamPartition,offset);
+    public void setMetricsOffset(SystemStreamPartition systemStreamPartition, String offset) {
+        metrics.setOffset(systemStreamPartition, offset);
     }
 }
 

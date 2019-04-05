@@ -63,7 +63,7 @@ public class TelemetryEventsValidatorTaskTest {
         when(contextMock.getMetricsRegistry()).thenReturn(metricsRegistry);
         stub(envelopeMock.getOffset()).toReturn("2");
         stub(envelopeMock.getSystemStreamPartition())
-                .toReturn( new SystemStreamPartition("kafka","telemetry.denorm",new Partition(1)));
+                .toReturn(new SystemStreamPartition("kafka", "telemetry.denorm", new Partition(1)));
         druidEventsValidatorTask = new DruidEventsValidatorTask(configMock, contextMock);
     }
 

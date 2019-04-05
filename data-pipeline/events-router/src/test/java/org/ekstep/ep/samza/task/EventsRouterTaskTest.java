@@ -60,7 +60,7 @@ public class EventsRouterTaskTest {
 		stub(contextMock.getMetricsRegistry()).toReturn(metricsRegistry);
 		stub(envelopeMock.getOffset()).toReturn("2");
 		stub(envelopeMock.getSystemStreamPartition())
-				.toReturn( new SystemStreamPartition("kafka","telemetry.denorm.valid",new Partition(1)));
+				.toReturn(new SystemStreamPartition("kafka", "telemetry.denorm.valid", new Partition(1)));
 
 	}
 

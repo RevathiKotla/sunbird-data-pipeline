@@ -31,6 +31,12 @@ public class DruidEventsValidatorSource {
     public String getMessage() {
         return envelope.toString();
     }
-    public SystemStreamPartition getSystemStreamPartition() { return envelope.getSystemStreamPartition();}
-    public String getOffset() { return envelope.getOffset();}
+
+    public SystemStreamPartition getSystemStreamPartition() {
+        return envelope.getSystemStreamPartition();
+    }
+
+    public String getOffset() {
+        return envelope.getOffset();
+    }
 }

@@ -59,7 +59,8 @@ public class SummaryEventsValidatorTaskTest {
         when(metricsRegistry.newCounter(anyString(), anyString())).thenReturn(counter);
         when(contextMock.getMetricsRegistry()).thenReturn(metricsRegistry);
         stub(envelopeMock.getOffset()).toReturn("2");
-        stub(envelopeMock.getSystemStreamPartition()).toReturn( new SystemStreamPartition("kafka","telemetry.denorm",new Partition(1)));
+        stub(envelopeMock.getSystemStreamPartition())
+                .toReturn(new SystemStreamPartition("kafka", "telemetry.denorm", new Partition(1)));
         when(configMock.get("telemetry.schema.path", TELEMETRY_SCHEMA_PATH)).thenReturn(TELEMETRY_SCHEMA_PATH);
         when(configMock.get("summary.schema.path", SUMMARY_SCHEMA_PATH)).thenReturn(SUMMARY_SCHEMA_PATH);
         when(configMock.get("event.schema.file", DEFAULT_SCHEMA_NAME)).thenReturn(DEFAULT_SCHEMA_NAME);

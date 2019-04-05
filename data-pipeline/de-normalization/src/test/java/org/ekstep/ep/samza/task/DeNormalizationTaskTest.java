@@ -81,7 +81,7 @@ public class DeNormalizationTaskTest {
         stub(contextMock.getMetricsRegistry()).toReturn(metricsRegistry);
         stub(envelopeMock.getOffset()).toReturn("2");
         stub(envelopeMock.getSystemStreamPartition())
-                .toReturn( new SystemStreamPartition("kafka","telemetry.with_location",new Partition(1)));
+                .toReturn(new SystemStreamPartition("kafka", "telemetry.with_location", new Partition(1)));
 
         deNormalizationTask = new DeNormalizationTask(configMock, contextMock, deviceCacheMock, userCacheMock, contentCacheMock, cassandraConnectMock, dailcodeCacheMock);
     }

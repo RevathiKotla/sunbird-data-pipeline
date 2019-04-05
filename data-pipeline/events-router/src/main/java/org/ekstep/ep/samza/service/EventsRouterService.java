@@ -11,7 +11,7 @@ import org.ekstep.ep.samza.task.EventsRouterSource;
 import com.google.gson.JsonSyntaxException;
 
 public class EventsRouterService {
-	
+
 	static Logger LOGGER = new Logger(EventsRouterService.class);
 	private final EventsRouterConfig config;
 
@@ -42,6 +42,6 @@ public class EventsRouterService {
 					e);
 			sink.toErrorTopic(event, e.getMessage());
 		}
-		sink.setMetricsOffset(source.getSystemStreamPartition(),source.getOffset());
+		sink.setMetricsOffset(source.getSystemStreamPartition(), source.getOffset());
 	}
 }

@@ -44,8 +44,7 @@ public class EventsRouterSink extends BaseSink {
 		metrics.incSkippedCounter();
 	}
 
-	public void setMetricsOffset(SystemStreamPartition systemStreamPartition, String offset)
-	{
-		metrics.setOffset(systemStreamPartition,offset);
+	public void setMetricsOffset(SystemStreamPartition systemStreamPartition, String offset) {
+		metrics.setOffset(systemStreamPartition, offset);
 	}
 }
