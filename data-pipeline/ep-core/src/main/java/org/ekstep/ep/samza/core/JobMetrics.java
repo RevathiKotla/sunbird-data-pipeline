@@ -102,7 +102,7 @@ public class JobMetrics {
 
     public String collect() {
 
-        Map<String,Object> metricsEvent = new HashMap<>();
+        Map<String, Object> metricsEvent = new HashMap<>();
         metricsEvent.put("job-name", jobName);
         metricsEvent.put("success-message-count", successMessageCount.getCount());
         metricsEvent.put("failed-message-count", failedMessageCount.getCount());
@@ -110,7 +110,7 @@ public class JobMetrics {
         metricsEvent.put("skipped-message-count", skippedMessageCount.getCount());
         metricsEvent.put("consumer-lag",
                 consumerLag(((MetricsRegistryMap) context.getSamzaContainerContext().metricsRegistry).metrics()));
-        metricsEvent.put("partition",partition);
+        metricsEvent.put("partition", partition);
         return new Gson().toJson(metricsEvent);
     }
 }
