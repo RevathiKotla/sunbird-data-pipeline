@@ -54,8 +54,7 @@ public class CassandraConnect {
         return rs.wasApplied();
     }
 
-    public UserType getUDTType(String keyspace, String typeName)
-    {
+    public UserType getUDTType(String keyspace, String typeName) {
         return session.getCluster().getMetadata().getKeyspace(keyspace).getUserType(typeName);
     }
 

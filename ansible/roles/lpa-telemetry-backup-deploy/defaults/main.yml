@@ -14,12 +14,20 @@ secor_service_name:
     consumer_group: "{{ env }}.events.deviceprofile.backup"
     base_path: "device-profile"
     timestamp_key: "updated_date"
+<<<<<<< HEAD
+=======
+    fallback_timestamp_key: "updated_date"
+>>>>>>> 292e29c73c0c23b42b66a30a697870d7617207c6
     topic: "{{ env }}.events.deviceprofile"
     kafka_broker_host: "{{groups['processing-cluster-kafka'][0]}}"
     zookeeper_quorum: "{{groups['processing-cluster-zookeepers']|join(':2181,')}}:2181"
     max_file_size: "100000000"
     max_file_age: "14400"
+<<<<<<< HEAD
     ostrich_port: "9997"
+=======
+    ostrich_port: "9989"
+>>>>>>> 292e29c73c0c23b42b66a30a697870d7617207c6
     partition_prefix_enabled: "false"
     partition_prefix_key: ""
     partition_prefix_mapping: "{}"
@@ -220,6 +228,7 @@ secor_service_name:
     service_description: "Pipeline metrics events backup"
     service_monitor_schedule_hr: "23"
     service_monitor_schedule_min: "50"
+<<<<<<< HEAD
     message_parser: "com.pinterest.secor.parser.PatternDateMessageParser"   
   assess-events-backup:
     consumer_group: "{{ env }}.telemetry_assess"
@@ -227,16 +236,36 @@ secor_service_name:
     timestamp_key: "assessmentTs"
     fallback_timestamp_key: "assessmentTs"
     topic: "{{ env }}.telemetry.assess"
+=======
+    message_parser: "com.pinterest.secor.parser.PatternDateMessageParser"
+  extractor-failed-backup:
+    consumer_group: "{{ env }}.extractor.failed"
+    base_path: "extractor-failed"
+    timestamp_key: "syncts"
+    fallback_timestamp_key: "@timestamp"
+    topic: "{{ env }}.telemetry.extractor.failed"
+>>>>>>> 292e29c73c0c23b42b66a30a697870d7617207c6
     kafka_broker_host: "{{groups['processing-cluster-kafka'][0]}}"
     zookeeper_quorum: "{{groups['processing-cluster-zookeepers']|join(':2181,')}}:2181"
     max_file_size: "100000000"
     max_file_age: "21600"
+<<<<<<< HEAD
     ostrich_port: "9988"
+=======
+    ostrich_port: "9989"
+>>>>>>> 292e29c73c0c23b42b66a30a697870d7617207c6
     partition_prefix_enabled: "false"
     partition_prefix_key: ""
     partition_prefix_mapping: "{}"
     output_file_pattern: "{partition}-{currentTimestamp}.json"
+<<<<<<< HEAD
     service_description: "Telemetry Batch assess events backup"
     service_monitor_schedule_hr: "23"
     service_monitor_schedule_min: "50"
     message_parser: "com.pinterest.secor.parser.PatternDateMessageParser"
+=======
+    service_description: "Extractor failed events backup"
+    service_monitor_schedule_hr: "23"
+    service_monitor_schedule_min: "50"
+    message_parser: "com.pinterest.secor.parser.PatternDateMessageParser"
+>>>>>>> 292e29c73c0c23b42b66a30a697870d7617207c6

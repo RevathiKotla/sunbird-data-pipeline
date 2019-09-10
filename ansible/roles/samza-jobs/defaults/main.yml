@@ -20,7 +20,10 @@ druid_events_validator_yarn_container_count: 1
 redis_updater_yarn_container_count: 1
 druidprocessor_yarn_container_count: 1
 device_profile_updater_yarn_container_count: 1
+<<<<<<< HEAD
 assessment_aggregator_yarn_container_count: 1
+=======
+>>>>>>> 292e29c73c0c23b42b66a30a697870d7617207c6
 
 # samza jobs checkpoint replication factor
 samza_checkpoint_replication_factor: 1

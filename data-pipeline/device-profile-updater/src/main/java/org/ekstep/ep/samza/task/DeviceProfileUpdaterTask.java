@@ -17,6 +17,8 @@ public class DeviceProfileUpdaterTask implements StreamTask, InitableTask, Windo
     static Logger LOGGER = new Logger(DeviceProfileUpdaterTask.class);
     private JobMetrics metrics;
     private DeviceProfileUpdaterService service;
+
+    private DeviceProfileUpdaterConfig config;
     private String metricsTopic;
     private RedisConnect redisConnect;
     private CassandraConnect cassandraConnect;
@@ -30,6 +32,7 @@ public class DeviceProfileUpdaterTask implements StreamTask, InitableTask, Windo
     public void init(Config config, TaskContext context) {
         metrics = new JobMetrics(context, JOB_NAME);
         redisConnect = new RedisConnect(config);
+        this.config = new DeviceProfileUpdaterConfig(config);
         cassandraConnect = new CassandraConnect(config);
         service = new DeviceProfileUpdaterService(config, redisConnect, cassandraConnect);
         metricsTopic = config.get("output.metrics.topic.name");
@@ -39,7 +42,8 @@ public class DeviceProfileUpdaterTask implements StreamTask, InitableTask, Windo
     public void process(IncomingMessageEnvelope envelope, MessageCollector collector,
                         TaskCoordinator taskCoordinator) throws Exception {
         DeviceProfileUpdaterSource source = new DeviceProfileUpdaterSource(envelope);
-        DeviceProfileUpdaterSink sink = new DeviceProfileUpdaterSink(collector, metrics);
+        DeviceProfileUpdaterSink sink = new DeviceProfileUpdaterSink(collector, metrics, config);
+
         service.process(source, sink);
     }
 

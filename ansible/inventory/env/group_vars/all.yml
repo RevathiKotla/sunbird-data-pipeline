@@ -156,6 +156,9 @@ job_names:
       job_file_name: 'telemetry-validator'
   DeviceProfileUpdater_1:
       job_file_name: 'device-profile-updater'
+<<<<<<< HEAD
   AssessmentAggregator_1:
       job_file_name: 'assessment-aggregator'
   
+=======
+>>>>>>> 292e29c73c0c23b42b66a30a697870d7617207c6

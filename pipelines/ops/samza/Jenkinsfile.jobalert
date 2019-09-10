@@ -39,7 +39,12 @@ node() {
         throw err
     }
     finally {
+<<<<<<< HEAD
         slack_notify(currentBuild.result)
         email_notify()
+=======
+      //  slack_notify(currentBuild.result)
+      //  email_notify()
+>>>>>>> 292e29c73c0c23b42b66a30a697870d7617207c6
     }
 }
