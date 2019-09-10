@@ -40,7 +40,7 @@ public class Telemetry {
     public <T> NullableValue<T> read(String keyPath) {
         try {
             ParentType parentMap = lastParentMap(map, keyPath);
-            return new NullableValue<T>(parentMap.<T>readChild());
+            return new NullableValue<T>(parentMap.readChild());
         } catch (Exception e) {
             logger.error("", format("Couldn't get key: {0} from event:{1}", keyPath, map), e);
             return new NullableValue<T>(null);

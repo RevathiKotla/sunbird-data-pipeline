@@ -45,7 +45,7 @@ public class Event {
         if (null != cdataList && !cdataList.isEmpty()) {
             for (Map<String, String> cdataMap : cdataList) {
                 if (cdataMap.containsKey("type") && cdataMap.get("type").equalsIgnoreCase("SignupType"))
-                    return cdataMap.get("id").toString();
+                    return cdataMap.get("id");
             }
 
         }
@@ -59,7 +59,7 @@ public class Event {
         if (null != cdataList && !cdataList.isEmpty()) {
             for (Map<String, String> cdataMap : cdataList) {
                 if (cdataMap.containsKey("type") && cdataMap.get("type").equalsIgnoreCase("UserRole"))
-                    return cdataMap.get("id").toString();
+                    return cdataMap.get("id");
             }
         }
         return null;

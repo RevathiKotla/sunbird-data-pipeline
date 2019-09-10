@@ -1,9 +1,10 @@
 package org.ekstep.ep.samza.util;
 
 import com.datastax.driver.core.*;
+import com.datastax.driver.core.querybuilder.Insert;
+import org.apache.samza.config.Config;
 
 import java.util.List;
-import org.apache.samza.config.Config;
 
 public class CassandraConnect {
     private Session session;
@@ -23,6 +24,7 @@ public class CassandraConnect {
         Cluster cluster = Cluster.builder().addContactPoints(host).withPort(port).build();
         this.session = cluster.connect();
     }
+
 
     public CassandraConnect(List<String> hosts, Integer port) {
         this.clusterHosts = hosts;
@@ -45,6 +47,16 @@ public class CassandraConnect {
     public List<Row> find(String query) {
         ResultSet rs = session.execute(query);
         return rs.all();
+    }
+
+    public boolean upsert(Insert query) {
+        ResultSet rs = session.execute(query);
+        return rs.wasApplied();
+    }
+
+    public UserType getUDTType(String keyspace, String typeName)
+    {
+        return session.getCluster().getMetadata().getKeyspace(keyspace).getUserType(typeName);
     }
 
     public void reconnect() {

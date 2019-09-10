@@ -4,7 +4,7 @@ import java.util.Map;
 
 public interface Mappable {
 
-    public Map<String,Object> getMap();
+    Map<String,Object> getMap();
 
-    public void setMetadata(Map<String,Object> metadata);
+    void setMetadata(Map<String, Object> metadata);
 }

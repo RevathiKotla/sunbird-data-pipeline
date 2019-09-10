@@ -7,7 +7,7 @@ import org.apache.samza.Partition;
 import org.apache.samza.config.Config;
 import org.apache.samza.system.IncomingMessageEnvelope;
 import org.apache.samza.system.SystemStreamPartition;
-import org.ekstep.ep.samza.service.Fixtures.EventFixture;
+import org.ekstep.ep.samza.fixtures.EventFixture;
 import org.ekstep.ep.samza.task.RedisUpdaterSink;
 import org.ekstep.ep.samza.task.RedisUpdaterSource;
 import org.ekstep.ep.samza.util.RedisConnect;

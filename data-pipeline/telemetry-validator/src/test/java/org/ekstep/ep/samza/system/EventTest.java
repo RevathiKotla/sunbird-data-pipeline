@@ -16,14 +16,14 @@ public class EventTest {
 	public void shouldReturnSchemaFileFromEid() {
 
 		Event event = new Event(EventFixture.validGeErrorEventMap());
-		Assert.assertEquals("ge_error.json", (String) event.schemaName());
+		Assert.assertEquals("ge_error.json", event.schemaName());
 	}
 
 	@Test
 	public void shouldReturnVerIfPresent() {
 
 		Event event = new Event(EventFixture.validGeErrorEventMap());
-		Assert.assertEquals("2.2", (String) event.version());
+		Assert.assertEquals("2.2", event.version());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -31,7 +31,7 @@ public class EventTest {
 	public void shouldReturnNullForEdata() {
 
 		Map<String, Object> event = EventFixture.invalidGeErrorEventMap();
-		Assert.assertEquals(null, (Map<String, Object>) event.get("edata"));
+		Assert.assertEquals(null, event.get("edata"));
 	}
 
 	@Test(expected = JsonSyntaxException.class)

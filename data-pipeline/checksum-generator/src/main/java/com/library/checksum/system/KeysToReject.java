@@ -33,7 +33,7 @@ public class KeysToReject implements Strategy {
         Map<String, Object> dupEvent = cloneEvent(event);
         for(String key : keysToReject){
             dupEvent.remove(key);
-        };
+        }
         return gson.toJson(dupEvent);
     }
 

@@ -33,7 +33,7 @@ public class KeysToAccept implements Strategy {
         Map<String,Object> newEvent = new HashMap<String, Object>();
         for(String key : keysToAccept){
             newEvent.put(key,event.get(key));
-        };
+        }
         return gson.toJson(newEvent);
     }
 }

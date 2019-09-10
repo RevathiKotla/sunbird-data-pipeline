@@ -12,6 +12,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import redis.clients.jedis.exceptions.JedisException;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +74,7 @@ public class TelemetryExtractorService {
 						event.put("context", context);
 					}
 					json = new Gson().toJson(event);
-					int eventSizeInBytes = json.getBytes("UTF-8").length;
+					int eventSizeInBytes = json.getBytes(StandardCharsets.UTF_8).length;
 					if (eventSizeInBytes > rawIndividualEventMaxSize) {
 						LOGGER.info("", String.format("Event with mid %s of size %d bytes is greater than %d. " +
 								"Sending to error topic", event.get("mid"), eventSizeInBytes, rawIndividualEventMaxSize));

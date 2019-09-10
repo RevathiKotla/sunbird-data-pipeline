@@ -24,7 +24,7 @@ public class ElasticSearchClient implements ElasticSearchService {
     }
 
     private HttpHost[] getHosts(int port, String... hosts) {
-        HttpHost httpHosts[] = new HttpHost[hosts.length];
+        HttpHost[] httpHosts = new HttpHost[hosts.length];
         for (int i = 0; i < hosts.length; i++) {
             httpHosts[i] = new HttpHost(hosts[i], port, "http");
         }
@@ -38,7 +38,7 @@ public class ElasticSearchClient implements ElasticSearchService {
 
         try {
 
-            Response indexResponse = client.performRequest("POST", endPoint, Collections.<String, String>emptyMap(), entity);
+            Response indexResponse = client.performRequest("POST", endPoint, Collections.emptyMap(), entity);
             LOGGER.info("indexResponse", indexResponse.toString());
 
             return new IndexResponse(getStatusCode(indexResponse), indexResponse.toString());

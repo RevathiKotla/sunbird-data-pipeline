@@ -208,13 +208,13 @@ public class TelemetryExtractorTaskTest {
         String output = (String) envelope.getMessage();
         Map<String, Object> event = (Map<String, Object>) new Gson().fromJson(output, Map.class);
         assertEquals("kafka", stream.getSystem());
-        assertEquals("LOG", (String) event.get("eid"));
+        assertEquals("LOG", event.get("eid"));
         Map<String, Object> edata = (Map<String, Object>) event.get("edata");
-        assertEquals("telemetry_audit", (String) edata.get("type"));
-        assertEquals("INFO", (String) edata.get("level"));
+        assertEquals("telemetry_audit", edata.get("type"));
+        assertEquals("INFO", edata.get("level"));
 
         Map<String, Object> param = (Map<String, Object>) ((List<Object>) edata.get("params")).get(0);
         assertEquals(2, ((Number) param.get("events_count")).intValue());
-        assertEquals("SUCCESS", (String) param.get("sync_status"));
+        assertEquals("SUCCESS", param.get("sync_status"));
     }
 }

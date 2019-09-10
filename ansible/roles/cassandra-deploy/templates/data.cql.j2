@@ -749,6 +749,30 @@ CREATE TABLE IF NOT EXISTS {{ cassandra.keyspace_prefix }}platform_db.experiment
     updated_by text,
     updated_on timestamp,
     PRIMARY KEY(exp_id)
-); 
+);
+
+CREATE TYPE IF NOT EXISTS assessment_question(
+    question_id: text,
+    max_score: int,
+    score: int,
+    type: text,
+    title: text,
+    pass: text,
+    description: text
+    duration:text
+);
+
+
+CREATE TABLE IF NOT EXISTS {{ cassandra.keyspace_prefix }}platform_db.assessment_profile (
+    batch_id text,
+    user_id text,
+    course_id text,
+    worksheet_id text,
+    attempt_id text,
+    updated_on timestamp,
+    created_on timestamp,
+    question list<frozen<assessment_question>>,
+    PRIMARY KEY (worksheet_id, attempt_id, user_id, course_id, batch_id )
+)
 
 

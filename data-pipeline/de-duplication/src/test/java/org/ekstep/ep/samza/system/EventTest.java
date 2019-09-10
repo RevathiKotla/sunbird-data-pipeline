@@ -16,21 +16,21 @@ public class EventTest {
     public void shouldReturnChecksumIfPresent(){
 
         Event event = new Event(EventFixture.EventWithChecksumMap());
-        Assert.assertEquals("INTERACT:fd63ff6bd0eedf05cf57c0058588ae69", (String) event.getChecksum());
+        Assert.assertEquals("INTERACT:fd63ff6bd0eedf05cf57c0058588ae69", event.getChecksum());
     }
 
     @Test
     public void shouldReturnMidIfPresent(){
 
         Event event = new Event(EventFixture.EventWithMidMap());
-        Assert.assertEquals("22e1430f2e5f339230dbf9595b060008", (String) event.getChecksum());
+        Assert.assertEquals("22e1430f2e5f339230dbf9595b060008", event.getChecksum());
     }
 
     @Test
     public void shouldReturnNullIfChecksumAndMidAreAbsent(){
 
         Event event = new Event(EventFixture.EventWithoutChecksumFieldMap());
-        Assert.assertEquals(null, (String) event.getChecksum());
+        Assert.assertEquals(null, event.getChecksum());
     }
 
     @Test

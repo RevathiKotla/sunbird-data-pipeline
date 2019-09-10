@@ -1,4 +1,4 @@
-package org.ekstep.ep.samza.service.Fixtures;
+package org.ekstep.ep.samza.fixtures;
 
 public class EventFixture {
     public static final String OBJECT_TYPE_CONTENT_EVENT_1 = "{\"ets\":1548780816826,\"channel\":\"in.ekstep\",\"transactionData\":{\"properties\":{\"ownershipType\":{\"ov\":null,\"nv\":[\"createdBy\"]},\"code\":{\"ov\":null,\"nv\":\"testbook1\"},\"channel\":{\"ov\":null,\"nv\":\"in.ekstep\"},\"description\":{\"ov\":null,\"nv\":\"TestCollection\"},\"status\":{\"ov\":null,\"nv\":\"Draft\"}}},\"label\":\"TestBook1\",\"nodeType\":\"DATA_NODE\",\"userId\":\"ANONYMOUS\",\"createdOn\":\"2019-01-29T22:23:36.826+0530\",\"objectType\":\"Content\",\"nodeUniqueId\":\"do_11268761245100441611\",\"requestId\":null,\"operationType\":\"CREATE\",\"nodeGraphId\":703654,\"graphId\":\"domain\"}";

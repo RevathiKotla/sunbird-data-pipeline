@@ -27,6 +27,7 @@
 		<module>cache-service</module>
 		<module>ep-telemetry-reader</module>
 		<module>es-client</module>
+		<module>assessment-aggregator</module>
 		<module>telemetry-validator</module>
 		<module>telemetry-extractor</module>
 		<module>de-duplication</module>
@@ -37,7 +38,8 @@
 		<module>events-router</module>
 		<!-- <module>druid-processor</module> -->
 		<module>redis-updater</module>
-	</modules>
+        <module>device-profile-updater</module>
+    </modules>
 
 	<properties>
 		<!-- maven specific properties -->
