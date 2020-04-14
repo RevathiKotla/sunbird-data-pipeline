@@ -140,6 +140,11 @@
             },
             {
               "type": "path",
+              "name": "user_login_type",
+              "expr": "$.userdata.userlogintype"
+            },
+            {
+              "type": "path",
               "name": "edata_item_id",
               "expr": "$.edata.item.id"
             },
@@ -283,6 +288,10 @@
             },
             {
               "type": "string",
+              "name": "user_login_type"
+            },
+            {
+              "type": "string",
               "name": "edata_type"
             },
             {
@@ -310,14 +319,22 @@
         }
       }
     },
- "transformSpec": {
+    "transformSpec": {
       "transforms": [
-         { "type": "expression", "name": "device_first_access", "expression": "timestamp_format(device_first_access, 'YYYY-MM-dd','Asia/Kolkata')" },
-         { "type": "expression", "name": "edata_size", "expression" : "if((edata_size>0),1,0)" }
+        {
+          "type": "expression",
+          "name": "device_first_access",
+          "expression": "timestamp_format(device_first_access, 'YYYY-MM-dd','Asia/Kolkata')"
+        },
+        {
+          "type": "expression",
+          "name": "edata_size",
+          "expression": "if((edata_size>0),1,0)"
+        }
       ]
     },
     "metricsSpec": [
-	 {
+      {
         "name": "total_count",
         "type": "count"
       },
@@ -341,7 +358,7 @@
         "name": "total_max_score",
         "fieldName": "edata_item_maxscore"
       }
-],
+    ],
     "granularitySpec": {
       "type": "uniform",
       "segmentGranularity": "day",

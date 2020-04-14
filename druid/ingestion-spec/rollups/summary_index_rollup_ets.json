@@ -146,6 +146,11 @@
             },
             {
               "type": "path",
+              "name": "user_login_type",
+              "expr": "$.userdata.userlogintype"
+            },
+            {
+              "type": "path",
               "name": "edata_interaction_count",
               "expr": "$.edata.eks.interact_events_count"
             },
@@ -237,6 +242,10 @@
             },
             {
               "type": "string",
+              "name": "user_login_type"
+            },
+            {
+              "type": "string",
               "name": "collection_name"
             },
             {
@@ -246,7 +255,7 @@
             {
               "type": "string",
               "name": "collection_type"
-            }
+            },
             {
               "name": "collection_medium"
             },
@@ -264,6 +273,15 @@
           "format": "auto"
         }
       }
+    },
+    "transformSpec": {
+      "transforms": [
+        {
+          "type": "expression",
+          "name": "device_first_access",
+          "expression": "timestamp_format(device_first_access, 'YYYY-MM-dd','Asia/Kolkata')"
+        }
+      ]
     },
     "metricsSpec": [
       {
@@ -289,7 +307,7 @@
     }
   },
   "ioConfig": {
-   "topic": "{{env}}.events.summary",
+    "topic": "{{env}}.events.summary",
     "consumerProperties": {
       "bootstrap.servers": "{{kafka_brokers}}"
     },
