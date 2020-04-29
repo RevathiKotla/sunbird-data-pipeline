@@ -1,6 +1,6 @@
 -
   name: Test Submit Job Report
-  hosts: localhost
+  hosts: spark
   become: yes
   roles: 
     - analytics-submit-report
