@@ -1,0 +1,2 @@
+- name: Update model config
+  template: src=druid-report-job.j2 dest={{ analytics.home }}/druid-report-job.sh mode=755 owner={{ analytics_user }} group={{ analytics_group }}

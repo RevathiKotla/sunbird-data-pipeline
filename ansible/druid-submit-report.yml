@@ -1,0 +1,7 @@
+-
+  name: Test Submit Job Report
+  hosts: localhost
+  become: yes
+  roles: 
+    - analytics-submit-report
+
