@@ -24,6 +24,8 @@ node() {
                 envDir = sh(returnStdout: true, script: "echo $JOB_NAME").split('/')[-3].trim()
                 module = sh(returnStdout: true, script: "echo $JOB_NAME").split('/')[-2].trim()
                 jobName = sh(returnStdout: true, script: "echo $JOB_NAME").split('/')[-1].trim()
+		def params = ${params.report_config}
+                config = params.replaceAll('"','\"')trim()
                 currentWs = sh(returnStdout: true, script: 'pwd').trim()
                 ansiblePlaybook = "${currentWs}/ansible/druid-submit-report.yml"
                 ansibleExtraArgs = "--extra-vars \"report_config=${params.report_config}\" --vault-password-file /var/lib/jenkins/secrets/vault-pass -vv"
@@ -33,6 +35,7 @@ node() {
                 values.put('jobName', jobName)
                 values.put('ansiblePlaybook', ansiblePlaybook)
                 values.put('ansibleExtraArgs', ansibleExtraArgs)
+		values.put('config', config)
                 println values
                 ansible_playbook_run(values)
                 currentBuild.result = "SUCCESS"
