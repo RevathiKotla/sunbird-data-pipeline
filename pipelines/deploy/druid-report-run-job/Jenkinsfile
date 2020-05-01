@@ -25,7 +25,7 @@ node() {
                 module = sh(returnStdout: true, script: "echo $JOB_NAME").split('/')[-2].trim()
                 jobName = sh(returnStdout: true, script: "echo $JOB_NAME").split('/')[-1].trim()
 		configTest = "${params.report_config}"
-                config = configTest.replaceAll('"','\"')trim()
+                config = configTest.replaceAll('\"','\\"')
                 currentWs = sh(returnStdout: true, script: 'pwd').trim()
                 ansiblePlaybook = "${currentWs}/ansible/druid-submit-report.yml"
                 ansibleExtraArgs = "--extra-vars \"report_config=${params.report_config}\" --vault-password-file /var/lib/jenkins/secrets/vault-pass -vv"
