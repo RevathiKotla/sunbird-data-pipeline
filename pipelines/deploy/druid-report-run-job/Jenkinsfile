@@ -24,11 +24,10 @@ node() {
                 envDir = sh(returnStdout: true, script: "echo $JOB_NAME").split('/')[-3].trim()
                 module = sh(returnStdout: true, script: "echo $JOB_NAME").split('/')[-2].trim()
                 jobName = sh(returnStdout: true, script: "echo $JOB_NAME").split('/')[-1].trim()
-		configTest = "${params.report_config}"
-                config = configTest.replaceAll('"','\\"')
+		config = sh(returnStdout: true, script: "echo '${params.report_config}' | sed -e 's/'\"'/\\"/g').trim()
                 currentWs = sh(returnStdout: true, script: 'pwd').trim()
                 ansiblePlaybook = "${currentWs}/ansible/druid-submit-report.yml"
-                ansibleExtraArgs = "--extra-vars \"report_config=${params.report_config}\" --vault-password-file /var/lib/jenkins/secrets/vault-pass -vv"
+                ansibleExtraArgs = "--extra-vars \"report_config=${config}\" --vault-password-file /var/lib/jenkins/secrets/vault-pass -vv"
                 values.put('currentWs', currentWs)
                 values.put('env', envDir)
                 values.put('module', module)
