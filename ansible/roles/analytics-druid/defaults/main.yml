@@ -5,8 +5,8 @@ zookeeper_group: "{{ groups['druid-zookeeper'] }}"
 
 druid_user: druid
 druid_directory: "/data"
-druid_version: "0.16.0-incubating"
-druid_url: "http://mirrors.estointernet.in/apache/incubator/druid/0.16.0-incubating/apache-druid-0.16.0-incubating-bin.tar.gz"
+druid_version: "0.18.1"
+druid_url: "http://apachemirror.wuchna.com/druid/0.18.1/apache-druid-0.18.1-bin.tar.gz"
 druid_folder: "{{ druid_directory }}/apache-druid-{{ druid_version }}"
 druid_symlink: "{{ druid_directory }}/druid"
 druid_path: "{{ druid_symlink }}/"
